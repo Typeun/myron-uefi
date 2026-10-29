@@ -53,8 +53,11 @@ python3 validate_memory_map.py
 
 ## 状态
 
-**已验证（离线）**
+**已验证**
 
+- **已编译通过**：GitHub Actions `ubuntu-24.04`（[run 40821624925](https://github.com/Typeun/myron-uefi/actions/runs/40821624925)，2026-10-29），
+  产出 `SILICIUM_UEFI.fd` 3,145,728 字节（= `0x300000`），SHA-256
+  `d7a3d2f3b15478fd44b56044317ea4f08b23c2a5de30277689a125c0d080a8e5`；
 - 内存表 76 个描述符、62 个 `AddMem` 段无重叠，FD / Kernel / XNU payload / DXE heap 四条边界都钉在保留区上；
 - `myron.dtb` 的 `/reserved-memory` 与本机读出的 59 段完全一致；
 - 用本机 live FDT（`/proc/device-tree`，含 ABL 叠加的 dtbo）复核：48 段实际保留区**全部**落在 `Reserv` 描述符内，
@@ -63,8 +66,7 @@ python3 validate_memory_map.py
 
 **未验证**
 
-- 本机是 Windows，没有 EDK2 工具链，**没有编译过这个包**；首次编译要在 Linux 或 GitHub Actions 上做；
-- **没有在真机上 `fastboot boot` 过**；
+- **没有在真机上 `fastboot boot` 过**（FD 只是固件卷，还要 `unixnu bootimg` 把 BootShim、payload 和设备树包成 boot.img）；
 - ACPI 仍是一加 15 的表，`aston` 驱动二进制是否完全适配本机外设未知；
 - 面板不重新初始化（用固件 framebuffer），刷新靠上层。
 
